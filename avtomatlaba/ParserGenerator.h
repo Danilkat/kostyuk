@@ -87,22 +87,21 @@ private:
 	};
 
 	enum class Nonterminal {
-		S, // → define D begin A end
-		D, // → intID | floatID | massIntPD | massFloatPD | λ
+		S, // → intIS | arrayIS | aH=E;Q | read(aH);Q | write(E);Q | new(a, E);Q | if (C) {SQ} KZQ | while (C) {SQ} Q
+		Q, // → aH = E; Q | read(aH); Q | write(E); Q | new(a, E);Q | if (C) {SQ} KZQ |  while (C)  {SQ}Q | λ
+		A, // → aH = E; | read(aH); |  write(E); | new(a, E); | if (C) {SQ} KZ | while (C) {SQ}
 		I, // → aM
 		M, // → ,aM | ;
-		P, // → a[i]N
-		N, // → ,a[i]N | ;
-		A, // → aH = E;A | if (C) {A} KZA | while (C) {A} A | read(aH);A | write(E);A | λ
 		H, // → [E] | λ
-		C, // → (E)VUL | aHVUL | iVUL | fVUL
+		C, // → (E)VUL | aHVUL | kVUL | +GVUL | -GVUL
 		L, // → <EZ | >EZ | == EZ | ≤EZ | ≥EZ | !=EZ
-		K, // → else {A} | λ
-		E, // → (E)VU | aHVU | iVU | fVU
-		U, // → + TU | -TU | λ
-		T, // → (E)V | aHV | iV | fV
+		K, // → else {SQ} | λ
+		E, // → (E)VU | aHVU | +GVU | -GVU
+		U, // → +TU | -TU | λ
+		T, // → (E)V | aHV | kV | +GV | -GV
 		V, // → *FV | /FV | λ
-		F, // → (E) | aH | i | f
+		F, // → +G | -GZ | (E) | aH | k
+		G, // → (E) | aH | k
 		Z, // → λ
 		Error // ошибочное состояние
 	};
