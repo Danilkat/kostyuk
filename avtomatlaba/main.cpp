@@ -17,12 +17,16 @@ int main() {
 	{
 		Analyzer textAnalyzer(program_text);
 		textAnalyzer.Run();
+		
+		vector<lexeme> buff = textAnalyzer.GetData();
+
 
 		Generator opsGenerator(textAnalyzer.GetData());
 		opsGenerator.Run();
-
-		Interpreter opsInterpreter(opsGenerator.GetData());
-		opsInterpreter.Run();
+		InterpretData buff2 = opsGenerator.GetData();
+		
+		//Interpreter opsInterpreter(opsGenerator.GetData());
+		//opsInterpreter.Run();
 	}
 	catch (const exception& ex)
 	{

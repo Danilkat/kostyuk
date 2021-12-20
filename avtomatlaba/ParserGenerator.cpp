@@ -20,8 +20,8 @@ void Generator::RecognizeNonterminal() {
             magazine.emplace(lexemeType::VarName);
 
             generator.emplace(GeneratorTask::Empty);
-            generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Assign);
+            generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::VariableId);
@@ -141,14 +141,14 @@ void Generator::RecognizeNonterminal() {
             magazine.emplace(lexemeType::Semicolon);
             magazine.emplace(lexemeType::RightRoundBracket);
             magazine.emplace(Nonterminal::E);
-            magazine.emplace(lexemeType::Сomma);
+            magazine.emplace(lexemeType::Comma);
             magazine.emplace(lexemeType::VarName);
             magazine.emplace(lexemeType::LeftRoundBracket);
             magazine.emplace(lexemeType::Allocate);
 
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
-            generator.emplace(GeneratorTask::Task12); // буква m
+            generator.emplace(GeneratorTask::Memory); // буква m
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::VariableId);
@@ -178,8 +178,8 @@ void Generator::RecognizeNonterminal() {
             magazine.emplace(lexemeType::VarName);
 
             generator.emplace(GeneratorTask::Empty);
-            generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Assign);
+            generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::VariableId);
@@ -277,14 +277,14 @@ void Generator::RecognizeNonterminal() {
             magazine.emplace(lexemeType::Semicolon);
             magazine.emplace(lexemeType::RightRoundBracket);
             magazine.emplace(Nonterminal::E);
-            magazine.emplace(lexemeType::Сomma);
+            magazine.emplace(lexemeType::Comma);
             magazine.emplace(lexemeType::VarName);
             magazine.emplace(lexemeType::LeftRoundBracket);
             magazine.emplace(lexemeType::Allocate);
 
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
-            generator.emplace(GeneratorTask::Task12); // буква m
+            generator.emplace(GeneratorTask::Memory); // буква m
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::VariableId);
@@ -311,8 +311,8 @@ void Generator::RecognizeNonterminal() {
             magazine.emplace(Nonterminal::H);
             magazine.emplace(lexemeType::VarName);
 
-            generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Assign);
+            generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::VariableId);
@@ -401,13 +401,13 @@ void Generator::RecognizeNonterminal() {
             magazine.emplace(lexemeType::Semicolon);
             magazine.emplace(lexemeType::RightRoundBracket);
             magazine.emplace(Nonterminal::E);
-            magazine.emplace(lexemeType::Сomma);
+            magazine.emplace(lexemeType::Comma);
             magazine.emplace(lexemeType::VarName);
             magazine.emplace(lexemeType::LeftRoundBracket);
             magazine.emplace(lexemeType::Allocate);
 
             generator.emplace(GeneratorTask::Empty);
-            generator.emplace(GeneratorTask::Task12); // буква m
+            generator.emplace(GeneratorTask::Memory); // буква m
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::Empty);
             generator.emplace(GeneratorTask::VariableId);
@@ -1121,6 +1121,29 @@ void Generator::DoTask() {
     case GeneratorTask::Task7:
     {
         current_table = table::MassInt;
+        break;
+    }
+    case GeneratorTask::Task8:
+    {
+        string name = current_lexeme.value;
+
+        if (data.int_table.count(name) ||
+            data.massInt_table.count(name)) {
+            string msg = "Generator error; Redefine a variable name = '" + name + "';";
+            throw InterpretException(msg, current_lexeme.info);
+        }
+        if (current_table == table::Int) {
+            data.int_table.insert({ name, 0 });
+        }
+        else if (current_table == table::MassInt) {
+            data.massInt_table.insert({ name, vector<int>(0) });
+        }
+
+        break;
+    }
+    case GeneratorTask::Memory:
+    {
+        data.ops.emplace_back(OpsItemOperation::Memory, current_lexeme.info);
         break;
     }
     default: {

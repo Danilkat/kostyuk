@@ -1,36 +1,30 @@
-define
-    int n, i, j;
-    massFloat arr[50];
-    float temp;
-begin
-    read(n); # чтение n                    
-    i = 0;
 
-    # чтение массива
-    while(i < n)                    
-       read(arr[i]);                 
-       i = i + 1;                    
-    }                                
-    
-    # сортировка                                 
-    i = 0;                           
-    while (i < n - 1) {              
-       j = 0;                        
-       while (j < n - i - 1) {       
-          if (arr[j] > arr[j + 1]) { 
-             temp = arr[j];          
-             arr[j] = arr[j + 1];    
-             arr[j + 1] = temp;      
-          }                          
-          j = j + 1;                 
-       }                             
-       i = i + 1;                    
-    }                                
+int n, i, j, temp;
+array arr;
+read(n);                 
+i = 0;
+new(arr, n);
+while(i < n) {                    
+    read(arr[i]);                 
+    i = i + 1;                    
+}                                
+                                   
+i = 0;                           
+while (i < n - 1) {              
+    j = 0;                        
+    while (j < n - i - 1) {       
+        if (arr[j] > arr[j + 1]) { 
+            temp = arr[j];          
+            arr[j] = arr[j + 1];    
+            arr[j + 1] = temp;      
+        }                          
+        j = j + 1;                 
+    }                             
+    i = i + 1;                    
+}                                
                                      
-    i = 0;                           
-    while (i < n) {                  
-       write(arr[i]); #вывод элементов массива                
-       i = i + 1;                    
-    }
-end   
-    # конец программы :)
+i = 0;                           
+while (i < n) {                  
+    write(arr[i]);              
+    i = i + 1;                    
+}

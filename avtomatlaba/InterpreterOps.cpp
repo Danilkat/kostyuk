@@ -30,23 +30,24 @@ int Interpreter::GetInt(OpsItem& item) {
 }
 
 double Interpreter::GetFloat(OpsItem& item) {
-	if (item.type == OpsItemType::FloatNumber)
-	{
-		return item.float_num;
-	}
-	else if (input_data.float_table.count(item.var_name))
-	{
-		return input_data.float_table[item.var_name];
-	}
-	else if (input_data.massFloat_table.count(item.var_name))
-	{
-		return input_data.massFloat_table[item.var_name][item.int_num];
-	}
-	else
-	{
-		string msg = "Interpreter error; float variable or float number was expected;";
-		throw InterpretException(msg, item.info);
-	}
+//	if (item.type == OpsItemType::FloatNumber)
+//	{
+//		return item.float_num;
+//	}
+//	else if (input_data.float_table.count(item.var_name))
+//	{
+//		return input_data.float_table[item.var_name];
+//	}
+//	else if (input_data.massFloat_table.count(item.var_name))
+//	{
+//		return input_data.massFloat_table[item.var_name][item.int_num];
+//	}
+//	else
+//	{
+//		string msg = "Interpreter error; float variable or float number was expected;";
+//		throw InterpretException(msg, item.info);
+//	}
+	return 0.0;
 }
 
 void Interpreter::SetInt(OpsItem& item, int num) {
@@ -66,23 +67,24 @@ void Interpreter::SetInt(OpsItem& item, int num) {
 }
 
 void Interpreter::SetFloat(OpsItem& item, double num) {
-	if (input_data.float_table.count(item.var_name))
-	{
-		input_data.float_table[item.var_name] = num;
-	}
-	else if (input_data.massFloat_table.count(item.var_name))
-	{
-		input_data.massFloat_table[item.var_name][item.int_num] = num;
-	}
-	else
-	{
-		string msg = "Interpreter error; float variable was expected;";
-		throw InterpretException(msg, item.info);
-	}
+//	if (input_data.float_table.count(item.var_name))
+//	{
+//		input_data.float_table[item.var_name] = num;
+//	}
+//	else if (input_data.massFloat_table.count(item.var_name))
+//	{
+//		input_data.massFloat_table[item.var_name][item.int_num] = num;
+//	}
+//	else
+//	{
+//		string msg = "Interpreter error; float variable was expected;";
+//		throw InterpretException(msg, item.info);
+//	}
 }
 
 bool Interpreter::IsFloat(OpsItem& item) {
-	return item.type == OpsItemType::FloatVariable || item.type == OpsItemType::FloatNumber;
+//	return item.type == OpsItemType::FloatVariable || item.type == OpsItemType::FloatNumber;
+	return false;
 }
 
 void Interpreter::Run()
@@ -90,18 +92,18 @@ void Interpreter::Run()
 	stack<OpsItem> magazine;
 	auto& ops = input_data.ops;
 	auto& int_table = input_data.int_table;
-	auto& float_table = input_data.float_table;
+	//auto& float_table = input_data.float_table;
 	auto& arrayInt_table = input_data.massInt_table;
-	auto& arrayFloat_table = input_data.massFloat_table;
+	//auto& arrayFloat_table = input_data.massFloat_table;
 
 	for (size_t i = 0; i < ops.size(); ++i)
 	{
 		switch (ops[i].type)
 		{
 		case OpsItemType::IntVariable:
-		case OpsItemType::FloatVariable:
+		//case OpsItemType::FloatVariable:
 		case OpsItemType::IntNumber:
-		case OpsItemType::FloatNumber:
+		//case OpsItemType::FloatNumber:
 		{
 			magazine.push(ops[i]);
 			break;

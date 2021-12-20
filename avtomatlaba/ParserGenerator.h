@@ -32,6 +32,7 @@ enum class OpsItemOperation {
 	Jump,
 	JumpIfFalse,
 	Index,
+	Memory,
 	Error
 };
 
@@ -120,6 +121,7 @@ private:
 		Divide,
 		Less,
 		Assign,
+		Memory,
 		More,
 		Equal,
 		LessOrEqual,
