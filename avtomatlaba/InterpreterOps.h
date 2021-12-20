@@ -11,6 +11,7 @@ private:
 	double GetFloat(OpsItem&);
     void SetInt(OpsItem&, int);
 	void SetFloat(OpsItem&, double);
+	void AllocateMemory(OpsItem&, int);
 	bool IsFloat(OpsItem&);
 
 	InterpretData input_data;

@@ -66,6 +66,23 @@ void Interpreter::SetInt(OpsItem& item, int num) {
 	}
 }
 
+void Interpreter::AllocateMemory(OpsItem& passport, int n) {
+	if (input_data.massInt_table.count(passport.var_name))
+	{
+		if (input_data.massInt_table[passport.var_name].size() > 0) {
+			string msg = "Interpreter error; memory already initalized;";
+			throw InterpretException(msg, passport.info);
+		}
+		else {
+			input_data.massInt_table[passport.var_name].resize(n);
+		}
+	}
+	else {
+		string msg = "Interpreter error; unknown array passport;";
+		throw InterpretException(msg, passport.info);
+	}
+};
+
 void Interpreter::SetFloat(OpsItem& item, double num) {
 //	if (input_data.float_table.count(item.var_name))
 //	{
@@ -92,18 +109,14 @@ void Interpreter::Run()
 	stack<OpsItem> magazine;
 	auto& ops = input_data.ops;
 	auto& int_table = input_data.int_table;
-	//auto& float_table = input_data.float_table;
 	auto& arrayInt_table = input_data.massInt_table;
-	//auto& arrayFloat_table = input_data.massFloat_table;
 
 	for (size_t i = 0; i < ops.size(); ++i)
 	{
 		switch (ops[i].type)
 		{
 		case OpsItemType::IntVariable:
-		//case OpsItemType::FloatVariable:
 		case OpsItemType::IntNumber:
-		//case OpsItemType::FloatNumber:
 		{
 			magazine.push(ops[i]);
 			break;
@@ -115,50 +128,26 @@ void Interpreter::Run()
 			case OpsItemOperation::Read:
 			{
 				auto a = magazine.top(); magazine.pop();
-
-				if (IsFloat(a)) {
-					double number;
-					cin >> number;
-					SetFloat(a, number);
-				}
-				else {
-					int number;
-					cin >> number;
-					SetInt(a, number);
-				}
+				
+				int number;
+				cin >> number;
+				SetInt(a, number);
 				
 				break;
 			}
 			case OpsItemOperation::Write:
 			{
 				auto a = magazine.top(); magazine.pop();
-
-				if (IsFloat(a)) {
-					cout << GetFloat(a) << endl;
-				}
-				else {
-					cout << GetInt(a) << endl;
-				}
-
+				cout << GetInt(a) << endl;
 				break;
 			}
 			case OpsItemOperation::Plus:
 			{
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
-
-				if (!IsFloat(a) && !IsFloat(b)) {
-					int result;
-					result = GetInt(a) + GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left + right, a.info);
-				}
-
+				int result;
+				result = GetInt(a) + GetInt(b);
+				magazine.emplace(result, a.info);
 				break;
 			}
 			case OpsItemOperation::Minus:
@@ -166,17 +155,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					int result;
-					result = GetInt(a) - GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left - right, a.info);
-				}
+				int result;
+				result = GetInt(a) - GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -185,17 +166,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					int result;
-					result = GetInt(a) * GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left * right, a.info);
-				}
+				int result;
+				result = GetInt(a) * GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -204,17 +177,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					int result;
-					result = GetInt(a) / GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left / right, a.info);
-				}
+				int result;
+				result = GetInt(a) / GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -223,17 +188,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					bool result;
-					result = GetInt(a) < GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left < right, a.info);
-				}
+				bool result;
+				result = GetInt(a) < GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -243,22 +200,7 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (IsFloat(a)) {
-					if (IsFloat(b)) {
-						SetFloat(a, GetFloat(b));
-					}
-					else {
-						SetFloat(a, double(GetInt(b)));
-					}
-				}
-				else {
-					if (IsFloat(b)) {
-						SetInt(a, int(GetFloat(b)));
-					}
-					else {
-						SetInt(a, GetInt(b));
-					}
-				}
+				SetInt(a, GetInt(b));
 
 				break;
 			}
@@ -267,17 +209,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					bool result;
-					result = GetInt(a) > GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left > right, a.info);
-				}
+				bool result;
+				result = GetInt(a) > GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -286,17 +220,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					bool result;
-					result = GetInt(a) == GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left == right, a.info);
-				}
+				bool result;
+				result = GetInt(a) == GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -305,17 +231,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					bool result;
-					result = GetInt(a) <= GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left <= right, a.info);
-				}
+				bool result;
+				result = GetInt(a) <= GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -324,17 +242,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					bool result;
-					result = GetInt(a) >= GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left >= right, a.info);
-				}
+				bool result;
+				result = GetInt(a) >= GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -343,17 +253,9 @@ void Interpreter::Run()
 				auto b = magazine.top(); magazine.pop();
 				auto a = magazine.top(); magazine.pop();
 
-				if (!IsFloat(a) && !IsFloat(b)) {
-					bool result;
-					result = GetInt(a) != GetInt(b);
-					magazine.emplace(result, a.info);
-				}
-				else {
-					double left, right;
-					left = IsFloat(a) ? GetFloat(a) : GetInt(a);
-					right = IsFloat(b) ? GetFloat(b) : GetInt(b);
-					magazine.emplace(left != right, a.info);
-				}
+				bool result;
+				result = GetInt(a) != GetInt(b);
+				magazine.emplace(result, a.info);
 
 				break;
 			}
@@ -381,6 +283,15 @@ void Interpreter::Run()
 
 				arr.int_num = GetInt(idx);
 
+				magazine.push(arr);
+				break;
+			}
+			case OpsItemOperation::Memory:
+			{
+				auto n = magazine.top(); magazine.pop();
+				auto arr = magazine.top(); magazine.pop();
+
+				AllocateMemory(arr, GetInt(n));
 				magazine.push(arr);
 				break;
 			}
