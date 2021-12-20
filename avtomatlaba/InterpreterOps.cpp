@@ -286,6 +286,13 @@ void Interpreter::Run()
 				magazine.push(arr);
 				break;
 			}
+			case OpsItemOperation::UnarMinus:
+			{
+				auto a = magazine.top(); magazine.pop();
+
+				magazine.emplace(-GetInt(a), a.info);
+				break;
+			}
 			case OpsItemOperation::Memory:
 			{
 				auto n = magazine.top(); magazine.pop();

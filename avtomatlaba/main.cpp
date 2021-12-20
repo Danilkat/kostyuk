@@ -25,8 +25,8 @@ int main() {
 		opsGenerator.Run();
 		InterpretData buff2 = opsGenerator.GetData();
 		
-		//Interpreter opsInterpreter(opsGenerator.GetData());
-		//opsInterpreter.Run();
+		Interpreter opsInterpreter(opsGenerator.GetData());
+		opsInterpreter.Run();
 	}
 	catch (const exception& ex)
 	{

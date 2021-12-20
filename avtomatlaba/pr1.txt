@@ -28,3 +28,8 @@ while (i < n) {
     write(arr[i]);              
     i = i + 1;                    
 }
+
+i = -10;
+i = -(i+1)*-(-2+1);
+
+write(-i);

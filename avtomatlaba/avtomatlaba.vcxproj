@@ -146,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="pr1.txt" />
-    <Text Include="pr2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterpreterException.h" />
